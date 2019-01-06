@@ -24,6 +24,8 @@ class DeployContract:
         signed = self.w3.eth.account.signTransaction(transaction, self.priv)
         #print(signed.rawTransaction)
         tx_hash = self.w3.eth.sendRawTransaction(signed.rawTransaction)
+        #Waiting For Transaction To Get Mined And Then Updating Contract Instance/Object With Contract Address
+
         tx_receipt = self.w3.eth.waitForTransactionReceipt(tx_hash.hex())
         print('Trasaction Hash :    ',tx_hash.hex())
         instance = self.w3.eth.contract(

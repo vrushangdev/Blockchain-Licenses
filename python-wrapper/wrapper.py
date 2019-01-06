@@ -1,7 +1,7 @@
-from web3 import Web3
-from ethutils import DeployContract
-from web3 import Web3, HTTPProvider
 import ethutils
+from ethutils import DeployContract
+
+
 #Getting Latest Block Number
 
 
@@ -15,3 +15,4 @@ def test():
     contract=contract.deploy()
     print(contract.functions.getCandidateName().call())
     return contract.functions.getCandidateName().call()
+test()

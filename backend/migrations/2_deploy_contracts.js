@@ -1,5 +1,5 @@
-var Election = artifacts.require("./Election.sol");
+var LicenseToken = artifacts.require("./LicenseToken.sol");
 
 module.exports = function(deployer) {
-  deployer.deploy(Election);
+  deployer.deploy(LicenseToken);
 };

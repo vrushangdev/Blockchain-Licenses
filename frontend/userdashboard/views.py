@@ -4,8 +4,8 @@ from django.shortcuts import render,HttpResponse
 from web3 import Web3
 import json
 class DeployContract:
-    def __init__(self, abi, bin, public_key, private_key,provider='HTTP://127.0.0.1:7545'):
-        provider = 'HTTP://127.0.0.1:7545'
+    def __init__(self, abi, bin, public_key, private_key,provider='HTTP://127.0.0.1:8545'):
+        provider = 'HTTP://127.0.0.1:8545'
         self.w3 = Web3(Web3.HTTPProvider(provider))
         self.abi = abi # Your contract ABI code
         self.bin = bin # Your contract ByteCode
@@ -51,17 +51,22 @@ from web3 import Web3, HTTPProvider
 
 def test():
     #Public Key
-    eth_public_key ='0x7064167411cF1af4f578A7A6F382b501c9f81369'
-    eth_private_key ='12d4061a13e292f59a52a7cf6f2512ecca077773006fcb85d850b4aa6eb40e2d'
-    file_path ='/Users/vrushangdesai/Desktop/blocks-frontend/backend/build/contracts/Election.json'
+    eth_public_key ='0x1c534c5385828a5D9f394E5BAF53506F0b900a03'
+    eth_private_key ='f46c2fca55b266769cb1dde8e4635d1df758cf828c338f93560fdab5cf19c955'
+    file_path ='/Users/vrushangdesai/Desktop/blocks-frontend/backend/build/contracts/Admin.json'
     contract_interface = load_from_json(file_path)
     contract = DeployContract(contract_interface['abi'],contract_interface['bytecode'],eth_public_key,eth_private_key)
     contract=contract.deploy()
-    print(contract.functions.getCandidateName().call())
-    return contract.functions.getCandidateName().call()
+    data = dict()
+    data['admin_address']=contract.functions.getAdminAddress().call()
+
+    print(contract.functions.getAdminAddress().call())
+    return data
+
 #####################################################################################################################################
 #PLS IGNORE ABOVE CODE IT IS JUST FOR TESTING PURPOSES
 # Create your views here.
 def userdashboard(request):
     test_data=test()
-    return HttpResponse('<strong>{}</strong>'.format(test_data))
+    return render(request, 'userdashboard/set_admin.html', {
+        'Address': test_data['admin_address']})
