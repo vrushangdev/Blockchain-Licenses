@@ -103,11 +103,6 @@ constructor() public {
   }
 
 
-
-
-
-
-
   //Internal Private Methods
   function _owns(address _claimant,uint _licenseId) internal view returns (address) {
     return licenseNumberToClient[_licenseId];
@@ -116,12 +111,13 @@ constructor() public {
 
   function _mint(address _account,uint _type) onlyAdmin() internal returns (uint256 tokenId){
     LicenseAttributes memory licenseToken = LicenseAttributes({
-      licenseCategory : LicenseType(_type),
+      licenseType : LicenseType(_type),
       state : LicenseState.INACTIVE,
       registeredOn :now,
-      expiredOn : now ,
+      expiresOn : now ,
       device_hardware_id : "VRUSHANG"
       });
+      
       uint id = license.push(licenseToken) -1;
       _transfer(0x0000000000000000000000000000000000000000,_account,id);
       return id;
