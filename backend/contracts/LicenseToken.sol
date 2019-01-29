@@ -33,15 +33,15 @@ contract Admin {
 }
 //License Token Contract Start's Here
 
-//Inheriting All The Properties Ans Attribute's Of Admin Contract .
+//Inheriting All The Properties And Attribute's Of Admin Contract .
 contract LicenseToken is Admin {
 
 //Now Building Proper Data Type To Store All The Attribute's Of Each License .
   struct LicenseAttributes {
 
-    uint registeredOn;
-    uint expiresOn;
-    bytes32 device_hardware_id;
+    string registeredOn;
+    string expiresOn;
+    string device_hardware_id;
 
   }
 //declaring list of our license tokens with attributes as an array .
@@ -51,8 +51,7 @@ contract LicenseToken is Admin {
 mapping (uint256 => address) public licenseNumberToClient;
 //Would Look Something Like  "Client Address" => "Total Licenses Owned By An Individual"
 mapping (address => uint256) ownershipLicenseCount;
-//"License Index" => "To Addresses For Which Licenses Have To Be Approved"
-mapping (uint256 => address) public licenseNumberToBeApproved;
+
 
 //events
 //Genereate An Event When License Is Give To A Specific Address
@@ -101,11 +100,25 @@ constructor() public {
   }
 
 //this function is also admin only and only admin can create tokens 
-  function giveLicense(address _account,uint _registeredOn,uint _expiresOn,bytes32 _hwid)onlyAdmin() public {
+  function giveLicense(address _account,string memory _registeredOn,string memory _expiresOn,string memory _hwid)onlyAdmin() public {
     //now a private function will generate license and we wil store and emit it as an event
     uint256 licenseId = _mint(_account,_registeredOn,_expiresOn,_hwid);
     emit LicenseGiven(_account,licenseId);
   }
+  //to get details of complete license index
+function getLicenseHardwareId(uint licenseNumber) public view returns(string memory){
+
+  return license[licenseNumber].device_hardware_id;
+}
+
+function getLicenseRegisteredOnDate(uint licenseNumber) public view returns(string memory){
+
+  return license[licenseNumber].registeredOn;
+}
+function getLicenseExpiresOnDate(uint licenseNumber) public view returns(string memory){
+
+  return license[licenseNumber].expiresOn;
+}
 
 
   //Internal Private Methods
@@ -115,7 +128,7 @@ constructor() public {
   }
 
 //this function will create a new token with unique attributes
-  function _mint(address _account,uint _registeredOn,uint _expiresOn,bytes32 _hwid) onlyAdmin() internal returns (uint256 tokenId){
+  function _mint(address _account,string memory _registeredOn,string memory _expiresOn,string memory _hwid) onlyAdmin() internal returns (uint256 tokenId){
     //string memory hwid = string(_hwid);
     LicenseAttributes memory licenseToken = LicenseAttributes({
       registeredOn :_expiresOn,
